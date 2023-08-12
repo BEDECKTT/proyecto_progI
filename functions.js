@@ -26,7 +26,8 @@ var answers = [
   [0,0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0,0]
 ];
-
+//el arreglo colors sirve para poner colores especiales a cada casilla, posicion 0 es negro, posicion 1 es azul, y posision 2 es naranja, pueden probar otros colores pero
+//el punto es usar este orden con los indices de answer para hacer distinciones
 var colors = ['#000000', '#6892fa', '#ff5733'];
 var rows = [1,1,1,1,1,1,1,1,1];
 var cols = [1,1,1,1,1,1,1,1,1];
