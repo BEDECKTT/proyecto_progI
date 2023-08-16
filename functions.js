@@ -12,9 +12,10 @@ var field = [
 ];
 
 //esta matriz indica el estado de cada celda en el grid
-//0 es una celda vacia y un numero correcto
-//1 es una celda con un numero escrito al comenzar el juego(no se debe de poder modificar)
-//2 es una celda con un numero erroneo escrito.
+//0 es una celda vacia
+//1 es una respuesta correcta
+//2 es una celda con un numero escrito al comenzar el juego(no se debe de poder modificar)
+//3 es una celda con un numero erroneo escrito.
 var answers = [
   [0,0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0,0],
@@ -26,13 +27,31 @@ var answers = [
   [0,0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0,0]
 ];
-//el arreglo colors sirve para poner colores especiales a cada casilla, posicion 0 es negro, posicion 1 es azul, y posision 2 es naranja, pueden probar otros colores pero
-//el punto es usar este orden con los indices de answer para hacer distinciones
-var colors = ['#000000', '#6892fa', '#ff5733'];
+
+var colors = ['#ffffff','#000000', '#6892fa', '#ff5733'];
 var rows = [1,1,1,1,1,1,1,1,1];
 var cols = [1,1,1,1,1,1,1,1,1];
 var fams = [1,1,1,1,1,1,1,1,1];
-var primes = [1,2,3,5,7,11,13,17,19,23]
+var primes = [1,2,3,5,7,11,13,17,19,23];
+
+function creating_families(i , j){
+  var k = i + 1;
+  var tmp1;
+  var tmp2;
+  if((k % 3) === 0){
+    tmp2 = (k / 3) - 1;
+  }else{
+    tmp2 = (k - (k % 3)) / 3;
+  }
+  k = j + 1;
+	if ((k % 3) === 0){
+		tmp1 = (k / 3);
+	}else{
+		tmp1 = Math.floor((k + 3) / 3);
+	}
+	k = (tmp1 + (tmp2 * 3)) - 1;
+  return k;
+}
 
 //la funcion crea numeros aleatorios y hace la verificacion de filas, columnas y cajas usando numeros primos
 function filling_field() {
@@ -43,21 +62,7 @@ function filling_field() {
       //esta decision indica que tiene una probabilidad de 4 en 10 de llenarse
       if (prob > 6){
         var found = false;
-        var k = i + 1;
-        var tmp1;
-        var tmp2;
-        if((k % 3) === 0){
-          tmp2 = (k / 3) - 1;
-        }else{
-          tmp2 = (k - (k % 3)) / 3;
-        }
-        k = j + 1;
-				if ((k % 3) === 0){
-					tmp1 = (k / 3);
-				}else{
-					tmp1 = Math.floor((k + 3) / 3);
-				}
-				k = (tmp1 + (tmp2 * 3)) - 1;
+        var k = creating_families(i , j);
 				var found = false;
 				var skipper = 1;
 				while(found == false ){
@@ -66,7 +71,7 @@ function filling_field() {
 						rows[i] *= primes[n];
             cols[j] *= primes[n];
             fams[k] *= primes[n];
-            answers[i][j] = 1;
+            answers[i][j] = 2;
             field[i][j] = n;
 						found = true;
 					}
@@ -80,5 +85,13 @@ function filling_field() {
       }
     }
   }
-  
+}
+
+function checking_val(i, j, num){
+  var f = creating_families(i , j);
+  if ((cols[j] % primes[num]) === 0 || (rows[i] % primes[num]) === 0 || (fams[f] % primes[num]) === 0){
+    return 3;
+  }else{
+    return 1;
+  }
 }

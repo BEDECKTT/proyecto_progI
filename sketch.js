@@ -1,6 +1,6 @@
-// run it and click on the sudoku to solve it
 var stepx = 0;
 var stepy = 0;
+var cuadros = 50;
 
 function nineFields(size) {
   var fieldSize = size / 3;
@@ -13,70 +13,76 @@ function nineFields(size) {
 function keyPressed(){
   var i = stepx / 50;
   var j = stepy / 50;
+  var valuk  = keyCode - 96;
+
   if ( keyCode === UP_ARROW ) {
     if ( stepy === 0 ) {
       stepy = stepy;
     } else {
-      stepy = stepy - 50;
+      stepy = stepy - cuadros;
     }
 
   } else if ( keyCode === DOWN_ARROW ) {
     if ( stepy === 400 ) {
       stepy = stepy; 
     } else {
-      stepy = stepy + 50;
+      stepy = stepy + cuadros;
     }
     
   } else if ( keyCode === LEFT_ARROW ) {
     if ( stepx === 0 ) {
       stepx = stepx;  
     } else {
-      stepx = stepx - 50;
+      stepx = stepx - cuadros;
     }
     
   } else if ( keyCode === RIGHT_ARROW ) {
     if ( stepx === 400) {
       stepx = stepx;
     } else {
-      stepx = stepx + 50;
+      stepx = stepx + cuadros;
     }
     
-  } 
-
-  if ( keyCode === 97 ) {
-   field[j][i] = 1;
-  } else if ( keyCode === 98 ) {
-    field [j][i] = 2;
-  } else if ( keyCode === 99 ) {
-    field [j][i] = 3;
-  } else if ( keyCode === 100 ) {
-    field [j][i] = 4;
-  } else if ( keyCode === 101 ) {
-     field [j][i] = 5;
-  } else if ( keyCode === 102 ) {
-    field [j][i] = 6;
-  } else if ( keyCode === 103 ) {
-    field [j][i] = 7;
-  } else if ( keyCode === 104 ) {
-    field [j][i] = 8;
-  } else if ( keyCode === 105) {
-    field [j][i] = 9;
   }
+  if (valuk > 0 && valuk < 10){
+    if (field[j][i] !== valuk){
+      if (answers[j][i] !== 2 ){
+        var tmp = creating_families(j , i);
+        var num = field[j][i];
+        var k = checking_val(j , i, valuk);
+        fams[tmp] = fams[tmp] / primes[num];
+        fams[tmp] = fams[tmp] * primes[valuk];
+        cols[i] = cols[i] / primes[num];
+        cols[i] = cols[i] * primes[valuk];
+        rows[j] = rows[j] / primes[num];
+        rows[j] = rows[j] * primes[valuk];
+        answers[j][i] = k;
+        field[j][i] = valuk;
+      }
+    }
+  }
+}
 
+function mouseClicked(){
+  stepx = mouseX - (mouseX % cuadros);
+  stepy = mouseY - (mouseY % cuadros);
+  
 }
 
 function setup() {
-  createCanvas(450, 450);
+  var cnv = createCanvas(450, 450);
+  var x = (windowWidth - width) / 2;
+  var y = (windowHeight - height) / 2;
+  cnv.position(x, y);
   textSize(25);
   filling_field();
 }
 
 function draw() {
-  background(220);
+  background('#fff');
   strokeWeight(3);
   nineFields(450);
   strokeWeight(1);
-  //noFill();
   push()
   for (var x = 0; x < 3; x++) {
     push()
@@ -90,12 +96,13 @@ function draw() {
   pop();
   push();
   strokeWeight(1);
-  stroke(colors[1]);
   for (x = 0; x < 9; x++) {
     push();
     for (y = 0; y < 9; y++) {
+      var col = answers[y][x];
+      stroke(colors[col]);
       text(field[y][x] ? field[y][x] : '', 20, 35);
-      translate(0, 50);
+      translate(0, cuadros);
     }
     pop();
     translate(50, 0);
@@ -103,8 +110,8 @@ function draw() {
   pop();
   stroke(0, 0, 0);
   strokeWeight(2.5);
-  line(stepx, stepy, stepx + 49, stepy);
-  line(stepx + 49, stepy, stepx + 49, stepy + 49);
+  line(stepx, stepy, stepx + (cuadros - 1), stepy);
+  line(stepx + 49, stepy, stepx + (cuadros), stepy + 49);
   line(stepx + 49, stepy + 49, stepx, stepy +49);
   line(stepx, stepy + 49, stepx, stepy);
 }
