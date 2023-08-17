@@ -49,15 +49,24 @@ function keyPressed(){
       if (answers[j][i] !== 2 ){
         var tmp = creating_families(j , i);
         var num = field[j][i];
-        var k = checking_val(j , i, valuk);
+        //var k = checking_val(j , i, valuk);
         fams[tmp] = fams[tmp] / primes[num];
         fams[tmp] = fams[tmp] * primes[valuk];
         cols[i] = cols[i] / primes[num];
         cols[i] = cols[i] * primes[valuk];
         rows[j] = rows[j] / primes[num];
         rows[j] = rows[j] * primes[valuk];
-        answers[j][i] = k;
+        field[8][7] = 5;
+        //answers[j][i] = k;
         field[j][i] = valuk;
+        checking_val(j , i, valuk);
+        //checking_val(j , i);
+        /*if (k === 1){
+          if (cols[i] === counter && rows[j] === counter && fams[tmp] === counter){
+            var winner = determinate_win();
+            
+          }
+        }*/
       }
     }
   }
@@ -66,14 +75,13 @@ function keyPressed(){
 function mouseClicked(){
   stepx = mouseX - (mouseX % cuadros);
   stepy = mouseY - (mouseY % cuadros);
-  
 }
 
 function setup() {
   var cnv = createCanvas(450, 450);
   var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
-  cnv.position(x, y);
+  cnv.position(15, 15);
   textSize(25);
   filling_field();
 }
@@ -105,13 +113,13 @@ function draw() {
       translate(0, cuadros);
     }
     pop();
-    translate(50, 0);
+    translate(cuadros, 0);
   }
   pop();
   stroke(0, 0, 0);
   strokeWeight(2.5);
   line(stepx, stepy, stepx + (cuadros - 1), stepy);
-  line(stepx + 49, stepy, stepx + (cuadros), stepy + 49);
-  line(stepx + 49, stepy + 49, stepx, stepy +49);
-  line(stepx, stepy + 49, stepx, stepy);
+  line(stepx + (cuadros - 1), stepy, stepx + (cuadros), stepy + (cuadros - 1));
+  line(stepx + (cuadros - 1), stepy + (cuadros - 1), stepx, stepy + (cuadros - 1));
+  line(stepx, stepy + (cuadros - 1), stepx, stepy);
 }
